@@ -84,14 +84,13 @@
     background:var(--night-deep); border:1px solid var(--line); border-radius:12px; }
   .field input:focus { outline:2px solid var(--candle); }
 
-  /* ---- setup checklist ---- */
-  .check { display:flex; gap:14px; align-items:flex-start; padding:14px;
-    border-radius:14px; background:var(--night-soft); border:1px solid var(--line);
-    margin-bottom:10px; cursor:pointer; }
-  .check input { width:24px; height:24px; flex-shrink:0; margin-top:2px;
-    accent-color:var(--candle); }
-  .check .ct { font-family:'Fredoka',sans-serif; font-weight:500; color:var(--ghost); }
-  .check .cd { font-size:0.92rem; color:var(--text-dim); }
+  /* ---- generated board ---- */
+  .board-wrap { background:var(--night-deep); border:1px solid var(--line);
+    border-radius:16px; padding:10px; margin-bottom:14px; }
+  .board-wrap svg { width:100%; height:auto; display:block; }
+  .steps { padding-left:20px; color:var(--text-dim); font-size:0.95rem; }
+  .steps li { margin-bottom:6px; }
+  .steps strong { color:var(--candle-soft); }
 
   /* ---- game: top bar ---- */
   .gametop { display:flex; justify-content:space-between; align-items:center;
@@ -227,44 +226,30 @@
 <!-- ============ SETUP ============ -->
 <section id="screen-setup" class="screen">
   <div class="wrap">
-    <div class="kicker">Quick setup</div>
-    <h1 class="title">Set the table</h1>
-    <p class="sub">Do these once on your real board, then tap play.</p>
+    <div class="kicker">Tonight's board</div>
+    <h1 class="title">The Ghost deals 👻</h1>
+    <p class="sub">Lay your real tiles to match this map — terrain and number tokens
+      exactly as shown.</p>
 
-    <label class="check">
-      <input type="checkbox" />
-      <span>
-        <span class="ct">1 · Build the board</span><br />
-        <span class="cd">All 19 tiles, number tokens, and ports. Random or standard.</span>
-      </span>
-    </label>
-    <label class="check">
-      <input type="checkbox" />
-      <span>
-        <span class="ct">2 · Place starting pieces</span><br />
-        <span class="cd">Take turns placing settlements + roads, snake order. Your second
-          settlement gives starting resources.</span>
-      </span>
-    </label>
-    <label class="check">
-      <input type="checkbox" />
-      <span>
-        <span class="ct">3 · Place 4 Ghost blockers 👻</span><br />
-        <span class="cd">Take turns, 2 each, on strong open corners. They never produce and
-          never score — they just hog the good spots.</span>
-      </span>
-    </label>
-    <label class="check">
-      <input type="checkbox" />
-      <span>
-        <span class="ct">4 · House rule: 3-for-1 bank trades</span><br />
-        <span class="cd">Trade 3 of a resource for any 1 at the bank. Ports as printed.</span>
-      </span>
-    </label>
+    <div class="board-wrap">
+      <svg id="board-svg" viewBox="0 0 423 392" role="img"
+           aria-label="Tonight's randomly dealt board layout"></svg>
+    </div>
 
-    <button class="btn btn-primary" id="play-btn" style="margin-top:8px;">
-      We're ready — play! →
-    </button>
+    <button class="btn btn-soft" id="deal-btn">🎲 Deal a different board</button>
+
+    <div class="panel" style="margin-top:16px;">
+      <p class="f" style="color:var(--candle-soft);margin-bottom:8px;">Then, on the board:</p>
+      <ol class="steps">
+        <li>Place starting settlements &amp; roads — take turns, snake order. Your second
+          settlement pays starting resources.</li>
+        <li>Place <strong>4 Ghost blockers</strong> 👻 — 2 each, on strong open corners.
+          They never produce and never score.</li>
+        <li>The robber starts on the desert. Bank trades are <strong>3-for-1</strong>.</li>
+      </ol>
+    </div>
+
+    <button class="btn btn-primary" id="play-btn">Start playing →</button>
     <p class="center" style="margin-top:16px;">
       <button class="link" id="back-welcome">← Back</button>
     </p>
@@ -382,6 +367,131 @@
 
   var PIPS = {1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
 
+  /* ---------- board generator ---------- */
+  // 19 hexes, rows of 3-4-5-4-3; ADJ[h] lists each hex's neighbours.
+  var ADJ = [
+    [1,3,4],[0,2,4,5],[1,5,6],
+    [4,0,7,8],[3,5,0,1,8,9],[4,6,1,2,9,10],[5,2,10,11],
+    [8,3,12],[7,9,3,4,12,13],[8,10,4,5,13,14],[9,11,5,6,14,15],[10,6,15],
+    [13,7,8,16],[12,14,8,9,16,17],[13,15,9,10,17,18],[14,10,11,18],
+    [17,12,13],[16,18,13,14],[17,14,15]
+  ];
+  var TERRAIN = {
+    forest:    { color:'#3f7d54', icon:'🌲' },
+    pasture:   { color:'#8fc362', icon:'🐑' },
+    field:     { color:'#e9b949', icon:'🌾' },
+    hills:     { color:'#c46a4a', icon:'🧱' },
+    mountains: { color:'#8a93a8', icon:'⛰️' },
+    desert:    { color:'#d9c9a3', icon:'🏜️' }
+  };
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function redNumbersOk(board) {
+    for (var h = 0; h < 19; h++) {
+      var n = board[h].number;
+      if (n !== 6 && n !== 8) continue;
+      for (var k = 0; k < ADJ[h].length; k++) {
+        var m = board[ADJ[h][k]].number;
+        if (m === 6 || m === 8) return false;
+      }
+    }
+    return true;
+  }
+
+  function generateBoard() {
+    var pool = [];
+    function add(type, n) { for (var i = 0; i < n; i++) pool.push(type); }
+    add('forest', 4); add('pasture', 4); add('field', 4);
+    add('hills', 3); add('mountains', 3); add('desert', 1);
+    var numberSet = [2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12];
+
+    var board;
+    for (var attempt = 0; attempt < 400; attempt++) {
+      var terr = shuffle(pool.slice());
+      var nums = shuffle(numberSet.slice());
+      board = [];
+      var ni = 0;
+      for (var h = 0; h < 19; h++) {
+        var ter = terr[h];
+        board.push({ terrain: ter, number: ter === 'desert' ? null : nums[ni++] });
+      }
+      if (redNumbersOk(board)) break;
+    }
+    return board;
+  }
+
+  function renderBoard(board) {
+    var svg = $('board-svg');
+    if (!svg) return;
+    var R = 46, P = 12, hexW = R * Math.sqrt(3);
+    var counts = [3, 4, 5, 4, 3];
+    var x0 = P + hexW / 2, y0 = P + R;
+    svg.innerHTML = '';
+    var h = 0;
+    for (var r = 0; r < 5; r++) {
+      var off = (5 - counts[r]) / 2 * hexW;
+      var cy = y0 + r * 1.5 * R;
+      for (var j = 0; j < counts[r]; j++) {
+        drawHex(svg, x0 + off + j * hexW, cy, R, board[h]);
+        h++;
+      }
+    }
+  }
+
+  function drawHex(svg, cx, cy, R, hex) {
+    var ns = 'http://www.w3.org/2000/svg';
+    var info = TERRAIN[hex.terrain];
+    var pts = [];
+    for (var i = 0; i < 6; i++) {
+      var ang = (-90 + 60 * i) * Math.PI / 180;
+      pts.push((cx + R * Math.cos(ang)).toFixed(1) + ',' +
+               (cy + R * Math.sin(ang)).toFixed(1));
+    }
+    var poly = document.createElementNS(ns, 'polygon');
+    poly.setAttribute('points', pts.join(' '));
+    poly.setAttribute('fill', info.color);
+    poly.setAttribute('stroke', '#110d24');
+    poly.setAttribute('stroke-width', '2');
+    svg.appendChild(poly);
+
+    var icon = document.createElementNS(ns, 'text');
+    icon.setAttribute('x', cx);
+    icon.setAttribute('y', cy - 13);
+    icon.setAttribute('text-anchor', 'middle');
+    icon.setAttribute('dominant-baseline', 'central');
+    icon.setAttribute('font-size', '21');
+    icon.textContent = info.icon;
+    svg.appendChild(icon);
+
+    if (hex.number != null) {
+      var circ = document.createElementNS(ns, 'circle');
+      circ.setAttribute('cx', cx);
+      circ.setAttribute('cy', cy + 13);
+      circ.setAttribute('r', '15');
+      circ.setAttribute('fill', '#f4ecd8');
+      svg.appendChild(circ);
+      var num = document.createElementNS(ns, 'text');
+      num.setAttribute('x', cx);
+      num.setAttribute('y', cy + 13);
+      num.setAttribute('text-anchor', 'middle');
+      num.setAttribute('dominant-baseline', 'central');
+      num.setAttribute('font-size', '17');
+      num.setAttribute('font-weight', '700');
+      num.setAttribute('font-family', "'Fredoka', sans-serif");
+      var red = (hex.number === 6 || hex.number === 8);
+      num.setAttribute('fill', red ? '#c0392b' : '#2a2350');
+      num.textContent = hex.number;
+      svg.appendChild(num);
+    }
+  }
+
   /* ---------- helpers ---------- */
   function $(id) { return document.getElementById(id); }
 
@@ -431,6 +541,7 @@
   function freshGame(n1, n2) {
     return {
       players: [{ name:n1, score:0 }, { name:n2, score:0 }],
+      board: null,
       turnPos: 0,          // 0 = P1, 1 = P2, 2 = Ghost
       round: 1,
       step: 'roll',        // human: roll -> acted ; ghost: roll -> build -> built
@@ -622,9 +733,14 @@
       var n1 = ($('name1').value || '').trim() || 'Player 1';
       var n2 = ($('name2').value || '').trim() || 'Player 2';
       game = freshGame(n1, n2);
-      var boxes = document.querySelectorAll('#screen-setup input[type="checkbox"]');
-      for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
+      game.board = generateBoard();
+      renderBoard(game.board);
       showScreen('setup');
+    });
+
+    $('deal-btn').addEventListener('click', function () {
+      game.board = generateBoard();
+      renderBoard(game.board);
     });
 
     ['name1', 'name2'].forEach(function (id) {

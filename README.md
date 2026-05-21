@@ -102,7 +102,7 @@ screen like any other app — no app store, no account.
 - [x] Playable game companion — setup, dice, the Ghost's turns, scores, win detection
 - [x] Ghost turn engine (v1 — narrated road-building)
 - [x] In-app rules reference
-- [ ] Balanced board generator
+- [x] Balanced board generator — deals a fresh map, no two red numbers adjacent
 - [ ] Printable one-page rules sheet
 
 **Later:**

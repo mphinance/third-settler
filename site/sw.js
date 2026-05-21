@@ -1,7 +1,7 @@
 /* Third Settler — service worker
    Caches the app shell so game night works even with no signal. */
 
-const CACHE = 'third-settler-v2';
+const CACHE = 'third-settler-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -30,12 +30,27 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch: cache-first, fall back to network, then to the home page offline.
+// Fetch: network-first for pages (always fresh online), cache-first for assets.
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(
-    caches.match(event.request).then((hit) => {
-      return hit || fetch(event.request).catch(() => caches.match('./index.html'));
-    })
-  );
+  const req = event.request;
+  if (req.method !== 'GET') return;
+
+  const accept = req.headers.get('accept') || '';
+  const isPage = req.mode === 'navigate' || accept.indexOf('text/html') > -1;
+
+  if (isPage) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+          return res;
+        })
+        .catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
+    );
+  } else {
+    event.respondWith(
+      caches.match(req).then((hit) => hit || fetch(req))
+    );
+  }
 });

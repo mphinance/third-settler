@@ -175,7 +175,7 @@ Non-negotiable rules baked into the project:
 - [ ] Scaffold Next.js + TypeScript + Tailwind (when we start the game engine)
 
 ### Phase 1 — The Game Master engine
-- [ ] Board generator
+- [x] Board generator — balanced, enforces the 6/8 adjacency rule
 - [x] Dice roller + production narration
 - [x] Ghost turn engine + policies (v1 — narrated road-building)
 - [x] Score tracker + win detection
@@ -227,9 +227,9 @@ Non-negotiable rules baked into the project:
 
 ## 15. Immediate next step
 
-A playable game companion (`site/play.html`) is live — setup, dice, the Ghost's turns,
-score tracking, and win detection. Next: the balanced board generator so the app can
-dictate the map, then the printable rules sheet.
+A playable game companion (`site/play.html`) is live — it deals a balanced board, runs
+the dice, plays the Ghost's turns, tracks the score, and calls the winner. Next: the
+printable one-page rules sheet.
 
 ---
 
