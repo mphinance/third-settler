@@ -184,7 +184,7 @@ Non-negotiable rules baked into the project:
 - [ ] Ghost mascot art + spooky-cute UI
 - [ ] Big tap targets, dark-mode for evening play
 - [ ] Printable rules sheet
-- [x] PWA install — manifest, service worker, offline support, install button
+- [ ] PWA install — paused: the caching worker caused stale deploys; revisit once the app settles
 
 ### Phase 3 — Ship
 - [ ] Real-table playtest (the dad + son)

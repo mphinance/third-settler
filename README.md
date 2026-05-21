@@ -5,7 +5,7 @@
 ### *The player who always shows up.*
 
 [![Live](https://img.shields.io/badge/▲_live-third--settler.vercel.app-000000)](https://third-settler.vercel.app/)
-[![PWA](https://img.shields.io/badge/PWA-installable-7c63ff)](https://third-settler.vercel.app/)
+[![Web app](https://img.shields.io/badge/web_app-no_install_needed-7c63ff)](https://third-settler.vercel.app/)
 ![Price](https://img.shields.io/badge/price-free_forever-46c98b)
 ![License](https://img.shields.io/badge/license-MIT-9f8aff)
 ![Players](https://img.shields.io/badge/players-2_+_1_ghost-ff7a4d)
@@ -41,7 +41,7 @@ third-settler/
 │   ├── index.html          ← the landing page — a complete, installable PWA
 │   ├── play.html           ← the game companion — setup, dice, Ghost, scores
 │   ├── manifest.webmanifest ← PWA manifest
-│   ├── sw.js               ← service worker (works offline)
+│   ├── sw.js               ← service worker kill-switch (caching disabled for now)
 │   └── icon.svg            ← app icon
 ├── PLAN.md                 ← the full master plan: architecture, MVP, roadmap
 ├── README.md               ← you are here
@@ -85,12 +85,11 @@ neck who always shows up**: a third player that blocks the good spots, takes its
 never argues about whose go it is. Predictable, fair, and *just* annoying enough to make the
 game a real game again.
 
-## 📲 Install it like a real app
+## 📲 Use it on your phone
 
-The landing page is a full PWA — manifest, service worker, offline support, and an install
-button that appears when your browser supports it. On a phone: open the page, tap **Install
-the app** (or your browser's "Add to Home Screen"), and Third Settler lands on your home
-screen like any other app — no app store, no account.
+No install, no app store, no account — Third Settler runs in any phone browser. On iOS you
+can still tap **Share → Add to Home Screen** for an app-style icon. (Full offline-capable
+PWA support is paused while the app is changing fast, and will return once it settles.)
 
 ## 🗺️ Roadmap
 
