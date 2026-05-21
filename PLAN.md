@@ -170,8 +170,9 @@ Non-negotiable rules baked into the project:
 ### Phase 0 — Foundation
 - [x] Create repo, init git
 - [x] Write the master plan
-- [ ] Scaffold Next.js + TypeScript + Tailwind
-- [ ] First Vercel deploy (a live "coming soon" page)
+- [x] Build the landing page — a complete, installable PWA (single file, no build step)
+- [ ] First Vercel deploy (point the project's root directory at `site/`)
+- [ ] Scaffold Next.js + TypeScript + Tailwind (when we start the game engine)
 
 ### Phase 1 — The Game Master engine
 - [ ] Board generator
@@ -183,7 +184,7 @@ Non-negotiable rules baked into the project:
 - [ ] Ghost mascot art + spooky-cute UI
 - [ ] Big tap targets, dark-mode for evening play
 - [ ] Printable rules sheet
-- [ ] PWA install
+- [x] PWA install — manifest, service worker, offline support, install button
 
 ### Phase 3 — Ship
 - [ ] Real-table playtest (the dad + son)
@@ -226,8 +227,9 @@ Non-negotiable rules baked into the project:
 
 ## 15. Immediate next step
 
-Scaffold the Next.js app (Phase 0) and get a live "coming soon" page on Vercel — so there's
-a real URL to share the moment it's ready.
+The landing page is built and is a working PWA. Next: push this repo to GitHub and deploy
+`site/` to Vercel for a live, shareable URL — then scaffold the Next.js app and start
+building the Ghost engine.
 
 ---
 
