@@ -207,11 +207,13 @@
     <div class="panel">
       <div class="field">
         <label for="name1">Player 1</label>
-        <input id="name1" type="text" placeholder="e.g. Dad" maxlength="16" />
+        <input id="name1" type="text" placeholder="e.g. Dad" maxlength="16"
+               autocapitalize="words" autocomplete="off" />
       </div>
       <div class="field" style="margin-bottom:0;">
         <label for="name2">Player 2</label>
-        <input id="name2" type="text" placeholder="e.g. your co-pilot" maxlength="16" />
+        <input id="name2" type="text" placeholder="e.g. your co-pilot" maxlength="16"
+               autocapitalize="words" autocomplete="off" />
       </div>
     </div>
 
@@ -474,6 +476,10 @@
       card.classList.toggle('active', !isGhostTurn() && game.turnPos === p);
     }
 
+    // While a roll animates, leave the dice, narration and buttons untouched —
+    // a score tap mid-roll must not repaint the tumbling dice.
+    if (animating) return;
+
     var d1 = $('g-die1'), d2 = $('g-die2');
     if (game.dice) {
       paintDie(d1, game.dice[0]); paintDie(d2, game.dice[1]);
@@ -616,7 +622,15 @@
       var n1 = ($('name1').value || '').trim() || 'Player 1';
       var n2 = ($('name2').value || '').trim() || 'Player 2';
       game = freshGame(n1, n2);
+      var boxes = document.querySelectorAll('#screen-setup input[type="checkbox"]');
+      for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
       showScreen('setup');
+    });
+
+    ['name1', 'name2'].forEach(function (id) {
+      $(id).addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') $('start-btn').click();
+      });
     });
 
     $('resume-btn').addEventListener('click', function () {
@@ -658,6 +672,9 @@
     $('rules-close').addEventListener('click', function () { overlay.classList.remove('open'); });
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) overlay.classList.remove('open');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') overlay.classList.remove('open');
     });
 
     $('newgame-btn').addEventListener('click', function () {

@@ -3,7 +3,7 @@
   "name": "Third Settler",
   "short_name": "3rd Settler",
   "description": "The player who always shows up. A free companion app that runs the missing player, so two people can play board games that need three or four.",
-  "start_url": "./index.html",
+  "start_url": "./play.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
