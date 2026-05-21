@@ -39,6 +39,7 @@ table — not a screen.
 third-settler/
 ├── site/
 │   ├── index.html          ← the landing page — a complete, installable PWA
+│   ├── play.html           ← the game companion — setup, dice, Ghost, scores
 │   ├── manifest.webmanifest ← PWA manifest
 │   ├── sw.js               ← service worker (works offline)
 │   └── icon.svg            ← app icon
@@ -55,6 +56,9 @@ roller** so you can feel a piece of the product before it's finished.
 
 **Live:** **[third-settler.vercel.app](https://third-settler.vercel.app/)** — the real
 thing, installable as an app straight from your browser.
+
+**Play a game:** **[third-settler.vercel.app/play.html](https://third-settler.vercel.app/play.html)**
+— the companion runs the whole game night: setup, dice, the Ghost's turns, and the score.
 
 **Local quick look:** double-click `site/index.html` — opens right in your browser, dice
 roller and all. (The offline + install features only wake up on the live https URL above.)
@@ -94,11 +98,11 @@ screen like any other app — no app store, no account.
 
 - [x] Project set up + master plan written
 - [x] Landing page built as an installable PWA
-- [x] Dice roller with production narration *(live prototype on the landing page)*
 - [x] Deployed live on Vercel
+- [x] Playable game companion — setup, dice, the Ghost's turns, scores, win detection
+- [x] Ghost turn engine (v1 — narrated road-building)
+- [x] In-app rules reference
 - [ ] Balanced board generator
-- [ ] Ghost turn engine
-- [ ] Score tracker + win detection
 - [ ] Printable one-page rules sheet
 
 **Later:**

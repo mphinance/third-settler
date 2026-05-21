@@ -1,10 +1,11 @@
 /* Third Settler — service worker
    Caches the app shell so game night works even with no signal. */
 
-const CACHE = 'third-settler-v1';
+const CACHE = 'third-settler-v2';
 const ASSETS = [
   './',
   './index.html',
+  './play.html',
   './manifest.webmanifest',
   './icon.svg'
 ];

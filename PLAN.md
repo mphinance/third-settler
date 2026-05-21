@@ -176,9 +176,9 @@ Non-negotiable rules baked into the project:
 
 ### Phase 1 — The Game Master engine
 - [ ] Board generator
-- [ ] Dice roller + production narration
-- [ ] Ghost turn engine + policies
-- [ ] Score tracker + win detection
+- [x] Dice roller + production narration
+- [x] Ghost turn engine + policies (v1 — narrated road-building)
+- [x] Score tracker + win detection
 
 ### Phase 2 — Polish & feel
 - [ ] Ghost mascot art + spooky-cute UI
@@ -227,9 +227,9 @@ Non-negotiable rules baked into the project:
 
 ## 15. Immediate next step
 
-The landing page is live and installable at **third-settler.vercel.app**, with the repo
-public on GitHub. Next: scaffold the Next.js app and start building the Ghost engine —
-the balanced board generator first.
+A playable game companion (`site/play.html`) is live — setup, dice, the Ghost's turns,
+score tracking, and win detection. Next: the balanced board generator so the app can
+dictate the map, then the printable rules sheet.
 
 ---
 
