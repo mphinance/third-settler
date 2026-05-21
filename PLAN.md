@@ -171,7 +171,7 @@ Non-negotiable rules baked into the project:
 - [x] Create repo, init git
 - [x] Write the master plan
 - [x] Build the landing page — a complete, installable PWA (single file, no build step)
-- [ ] First Vercel deploy (point the project's root directory at `site/`)
+- [x] First Vercel deploy — live at third-settler.vercel.app
 - [ ] Scaffold Next.js + TypeScript + Tailwind (when we start the game engine)
 
 ### Phase 1 — The Game Master engine
@@ -227,9 +227,9 @@ Non-negotiable rules baked into the project:
 
 ## 15. Immediate next step
 
-The landing page is built and is a working PWA. Next: push this repo to GitHub and deploy
-`site/` to Vercel for a live, shareable URL — then scaffold the Next.js app and start
-building the Ghost engine.
+The landing page is live and installable at **third-settler.vercel.app**, with the repo
+public on GitHub. Next: scaffold the Next.js app and start building the Ghost engine —
+the balanced board generator first.
 
 ---
 

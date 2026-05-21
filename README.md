@@ -4,13 +4,15 @@
 
 ### *The player who always shows up.*
 
-![Status](https://img.shields.io/badge/status-in_development-ffb259)
-![PWA](https://img.shields.io/badge/PWA-installable-7c63ff)
+[![Live](https://img.shields.io/badge/▲_live-third--settler.vercel.app-000000)](https://third-settler.vercel.app/)
+[![PWA](https://img.shields.io/badge/PWA-installable-7c63ff)](https://third-settler.vercel.app/)
 ![Price](https://img.shields.io/badge/price-free_forever-46c98b)
 ![License](https://img.shields.io/badge/license-MIT-9f8aff)
 ![Players](https://img.shields.io/badge/players-2_+_1_ghost-ff7a4d)
 
 **A free web app that plays the third player — so two people can finally enjoy the board games that need three or four.**
+
+### → [**Open Third Settler**](https://third-settler.vercel.app/) ←
 
 </div>
 
@@ -49,17 +51,13 @@ The landing page isn't a mockup — it's a real, self-contained Progressive Web 
 file, zero dependencies, zero build step, nothing to break. It even has a **working dice
 roller** so you can feel a piece of the product before it's finished.
 
-## 👀 Preview it in 10 seconds
+## 👀 Try it
 
-**Quick look:** double-click `site/index.html` — it opens in your browser, dice roller and
-all.
+**Live:** **[third-settler.vercel.app](https://third-settler.vercel.app/)** — the real
+thing, installable as an app straight from your browser.
 
-**Full PWA (offline + installable):** service workers must be served over http, so:
-
-```bash
-npx serve site
-# then open the http://localhost address it prints
-```
+**Local quick look:** double-click `site/index.html` — opens right in your browser, dice
+roller and all. (The offline + install features only wake up on the live https URL above.)
 
 ## 🧠 How it works — the "Game Master" model
 
@@ -97,7 +95,7 @@ screen like any other app — no app store, no account.
 - [x] Project set up + master plan written
 - [x] Landing page built as an installable PWA
 - [x] Dice roller with production narration *(live prototype on the landing page)*
-- [ ] Deploy to Vercel for a live URL
+- [x] Deployed live on Vercel
 - [ ] Balanced board generator
 - [ ] Ghost turn engine
 - [ ] Score tracker + win detection
@@ -124,12 +122,13 @@ job.
 - **The app (coming):** Next.js · TypeScript · Tailwind.
 - **Hosting:** Vercel · **Source:** GitHub · **License:** MIT.
 
-## 🚀 Deploy (Vercel)
+## 🚀 Deployment
 
-1. Push this repo to GitHub.
-2. Import it at [vercel.com/new](https://vercel.com/new).
-3. Set **Root Directory** to `site`, framework preset **Other** (no build needed).
-4. Deploy — you're live.
+Live at **[third-settler.vercel.app](https://third-settler.vercel.app/)** on Vercel —
+every push to `main` redeploys automatically.
+
+To deploy a fork: import the repo at [vercel.com/new](https://vercel.com/new), set **Root
+Directory** to `site` and framework preset to **Other** (no build step needed).
 
 ## 🤝 Contributing
 
