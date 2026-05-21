@@ -84,10 +84,19 @@
     background:var(--night-deep); border:1px solid var(--line); border-radius:12px; }
   .field input:focus { outline:2px solid var(--candle); }
 
-  /* ---- generated board ---- */
+  /* ---- board setup ---- */
+  .seg { display:flex; gap:6px; background:var(--night-deep); border:1px solid var(--line);
+    border-radius:12px; padding:5px; margin-bottom:14px; }
+  .seg-btn { flex:1; padding:11px 8px; border:none; border-radius:9px; cursor:pointer;
+    font-family:'Fredoka',sans-serif; font-weight:500; font-size:0.98rem;
+    background:transparent; color:var(--text-dim); }
+  .seg-btn.active { background:linear-gradient(135deg,var(--candle),var(--pumpkin));
+    color:#2a1500; }
   .board-wrap { background:var(--night-deep); border:1px solid var(--line);
     border-radius:16px; padding:10px; margin-bottom:14px; }
   .board-wrap svg { width:100%; height:auto; display:block; }
+  .board-note { text-align:center; color:var(--text-dim); font-size:0.86rem;
+    margin-top:10px; }
   .steps { padding-left:20px; color:var(--text-dim); font-size:0.95rem; }
   .steps li { margin-bottom:6px; }
   .steps strong { color:var(--candle-soft); }
@@ -226,17 +235,23 @@
 <!-- ============ SETUP ============ -->
 <section id="screen-setup" class="screen">
   <div class="wrap">
-    <div class="kicker">Tonight's board</div>
-    <h1 class="title">The Ghost deals 👻</h1>
-    <p class="sub">Lay your real tiles to match this map — terrain and number tokens
-      exactly as shown.</p>
+    <div class="kicker">Set up the board</div>
+    <h1 class="title">Tonight's map 👻</h1>
+    <p class="sub">Pick how to set up, then lay your real tiles to match — terrain and
+      number tokens exactly as shown.</p>
+
+    <div class="seg" id="board-mode">
+      <button class="seg-btn" data-mode="standard" type="button">📋 Standard</button>
+      <button class="seg-btn active" data-mode="random" type="button">🎲 Random</button>
+    </div>
 
     <div class="board-wrap">
       <svg id="board-svg" viewBox="0 0 423 392" role="img"
-           aria-label="Tonight's randomly dealt board layout"></svg>
+           aria-label="The board layout to copy onto your table"></svg>
     </div>
 
     <button class="btn btn-soft" id="deal-btn">🎲 Deal a different board</button>
+    <p class="board-note" id="board-note"></p>
 
     <div class="panel" style="margin-top:16px;">
       <p class="f" style="color:var(--candle-soft);margin-bottom:8px;">Then, on the board:</p>
@@ -384,6 +399,15 @@
     mountains: { color:'#8a93a8', icon:'⛰️' },
     desert:    { color:'#d9c9a3', icon:'🏜️' }
   };
+
+  // A fixed, balanced board for players who want the same setup every game.
+  var STANDARD_BOARD = [
+    { terrain:'mountains', number:10 }, { terrain:'pasture', number:6 }, { terrain:'forest', number:2 },
+    { terrain:'field', number:9 }, { terrain:'forest', number:11 }, { terrain:'hills', number:4 }, { terrain:'pasture', number:12 },
+    { terrain:'forest', number:8 }, { terrain:'field', number:3 }, { terrain:'desert', number:null }, { terrain:'mountains', number:5 }, { terrain:'field', number:8 },
+    { terrain:'pasture', number:11 }, { terrain:'hills', number:9 }, { terrain:'forest', number:4 }, { terrain:'pasture', number:3 },
+    { terrain:'mountains', number:10 }, { terrain:'field', number:6 }, { terrain:'hills', number:5 }
+  ];
 
   function shuffle(a) {
     for (var i = a.length - 1; i > 0; i--) {
@@ -533,6 +557,26 @@
     return "Rolled " + sum + " — everyone collects: " + lines[sum];
   }
 
+  function setBoardMode(mode) {
+    game.boardMode = mode;
+    if (mode === 'standard') {
+      game.board = STANDARD_BOARD.map(function (h) {
+        return { terrain: h.terrain, number: h.number };
+      });
+    } else {
+      game.board = generateBoard();
+    }
+    renderBoard(game.board);
+    var btns = document.querySelectorAll('#board-mode .seg-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', btns[i].getAttribute('data-mode') === mode);
+    }
+    $('deal-btn').style.display = (mode === 'random') ? '' : 'none';
+    $('board-note').textContent = (mode === 'random')
+      ? 'A fresh balanced board — no two red numbers touch.'
+      : 'The same balanced board every game — nice for learning.';
+  }
+
   /* ---------- state ---------- */
   var game = null;
   var animating = false;
@@ -542,6 +586,7 @@
     return {
       players: [{ name:n1, score:0 }, { name:n2, score:0 }],
       board: null,
+      boardMode: 'random',
       turnPos: 0,          // 0 = P1, 1 = P2, 2 = Ghost
       round: 1,
       step: 'roll',        // human: roll -> acted ; ghost: roll -> build -> built
@@ -733,14 +778,18 @@
       var n1 = ($('name1').value || '').trim() || 'Player 1';
       var n2 = ($('name2').value || '').trim() || 'Player 2';
       game = freshGame(n1, n2);
-      game.board = generateBoard();
-      renderBoard(game.board);
+      setBoardMode('random');
       showScreen('setup');
     });
 
     $('deal-btn').addEventListener('click', function () {
       game.board = generateBoard();
       renderBoard(game.board);
+    });
+
+    $('board-mode').addEventListener('click', function (e) {
+      var b = e.target.closest('.seg-btn');
+      if (b) setBoardMode(b.getAttribute('data-mode'));
     });
 
     ['name1', 'name2'].forEach(function (id) {
