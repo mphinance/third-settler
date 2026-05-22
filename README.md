@@ -44,6 +44,7 @@ third-settler/
 │   ├── manifest.webmanifest ← PWA manifest
 │   ├── sw.js               ← service worker (network-first, offline support)
 │   └── icon.svg            ← app icon
+├── launch/                 ← launch drafts (Substack post, Product Hunt, sharing copy)
 ├── PLAN.md                 ← the full master plan: architecture, MVP, roadmap
 ├── README.md               ← you are here
 └── LICENSE                 ← MIT
