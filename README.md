@@ -5,7 +5,7 @@
 ### *The player who always shows up.*
 
 [![Live](https://img.shields.io/badge/▲_live-third--settler.vercel.app-000000)](https://third-settler.vercel.app/)
-[![Web app](https://img.shields.io/badge/web_app-no_install_needed-7c63ff)](https://third-settler.vercel.app/)
+[![PWA](https://img.shields.io/badge/PWA-installable-7c63ff)](https://third-settler.vercel.app/)
 ![Price](https://img.shields.io/badge/price-free_forever-46c98b)
 ![License](https://img.shields.io/badge/license-MIT-9f8aff)
 ![Players](https://img.shields.io/badge/players-2_+_1_ghost-ff7a4d)
@@ -41,7 +41,7 @@ third-settler/
 │   ├── index.html          ← the landing page — a complete, installable PWA
 │   ├── play.html           ← the game companion — setup, dice, Ghost, scores
 │   ├── manifest.webmanifest ← PWA manifest
-│   ├── sw.js               ← service worker kill-switch (caching disabled for now)
+│   ├── sw.js               ← service worker (network-first, offline support)
 │   └── icon.svg            ← app icon
 ├── PLAN.md                 ← the full master plan: architecture, MVP, roadmap
 ├── README.md               ← you are here
@@ -91,11 +91,12 @@ strongest with a pulsing 👻 for the Ghost's blockers. You copy those spots ont
 board. Your own pieces are yours to place however you like — the Ghost is a blocker and
 never needs to know where you built.
 
-## 📲 Use it on your phone
+## 📲 Install it like a real app
 
-No install, no app store, no account — Third Settler runs in any phone browser. On iOS you
-can still tap **Share → Add to Home Screen** for an app-style icon. (Full offline-capable
-PWA support is paused while the app is changing fast, and will return once it settles.)
+Third Settler is a full PWA — installable, and it works offline once loaded. On a phone,
+open it and tap **Install the app** (or your browser's **Add to Home Screen**); it lands on
+your home screen like any other app — no app store, no account. The service worker is
+network-first, so you always get the latest version while online.
 
 ## 🗺️ Roadmap
 

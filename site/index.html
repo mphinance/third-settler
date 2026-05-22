@@ -311,7 +311,7 @@
       <svg class="body" viewBox="0 0 200 240"><use href="#ghost"/></svg>
       <div class="shadow"></div>
     </div>
-    <div class="badge">👻 Free forever · No sign-up · Play in any browser</div>
+    <div class="badge">👻 Free forever · No sign-up · Works offline</div>
     <h1>Third Settler</h1>
     <div class="tagline">The player who always shows up.</div>
     <p class="lead">
@@ -565,8 +565,14 @@
     items.forEach(function (el) { io.observe(el); });
   })();
 
-  /* ---------- install prompt ---------- */
+  /* ---------- PWA: service worker + install prompt ---------- */
   (function () {
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+
     var installBtn = document.getElementById('installBtn');
     var deferred = null;
 

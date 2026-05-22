@@ -936,6 +936,10 @@
       refreshResume();
       showScreen('welcome');
     });
+
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    }
   }
 
   if (document.readyState === 'loading') {
