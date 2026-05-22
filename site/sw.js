@@ -10,6 +10,7 @@ const ASSETS = [
   './',
   './index.html',
   './play.html',
+  './rules.html',
   './manifest.webmanifest',
   './icon.svg'
 ];

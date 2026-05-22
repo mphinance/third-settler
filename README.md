@@ -40,6 +40,7 @@ third-settler/
 ├── site/
 │   ├── index.html          ← the landing page — a complete, installable PWA
 │   ├── play.html           ← the game companion — setup, dice, Ghost, scores
+│   ├── rules.html          ← printable two-player rules sheet
 │   ├── manifest.webmanifest ← PWA manifest
 │   ├── sw.js               ← service worker (network-first, offline support)
 │   └── icon.svg            ← app icon
@@ -109,7 +110,7 @@ network-first, so you always get the latest version while online.
 - [x] Ghost turn engine (v1 — narrated road-building)
 - [x] In-app rules reference
 - [x] Balanced board generator — deals a fresh map, no two red numbers adjacent
-- [ ] Printable one-page rules sheet
+- [x] Printable one-page rules sheet
 
 **Later:**
 

@@ -181,9 +181,9 @@ Non-negotiable rules baked into the project:
 - [x] Score tracker + win detection
 
 ### Phase 2 — Polish & feel
-- [ ] Ghost mascot art + spooky-cute UI
-- [ ] Big tap targets, dark-mode for evening play
-- [ ] Printable rules sheet
+- [x] Ghost mascot art + spooky-cute UI
+- [x] Big tap targets, dark-mode for evening play
+- [x] Printable rules sheet — a one-page print-friendly house-rules page
 - [x] PWA install — network-first service worker, offline support, install button
 
 ### Phase 3 — Ship

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Third Settler — Two-Player Rules</title>
+<meta name="description" content="The printable two-player house rules for Third Settler." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2288%22>👻</text></svg>" />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#1a1433" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:'Inter',system-ui,sans-serif;
+    background:linear-gradient(180deg,#1a1433,#110d24);
+    color:#ece8fb; line-height:1.55; padding:24px 16px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .controls {
+    max-width:640px; margin:0 auto 18px; display:flex; gap:12px;
+    align-items:center; justify-content:space-between; flex-wrap:wrap;
+  }
+  .print-btn {
+    font-family:'Fredoka',sans-serif; font-weight:500; font-size:1rem;
+    padding:12px 22px; border:none; border-radius:12px; cursor:pointer;
+    background:linear-gradient(135deg,#ffb259,#ff7a4d); color:#2a1500;
+  }
+  .back { color:#a79fce; font-size:0.92rem; text-decoration:underline;
+    text-underline-offset:3px; }
+  .sheet {
+    max-width:640px; margin:0 auto; background:#251d48;
+    border:1px solid rgba(255,255,255,0.09); border-radius:18px;
+    padding:34px 32px;
+  }
+  .sheet h1 { font-family:'Fredoka',sans-serif; font-weight:700; font-size:2rem;
+    text-align:center; }
+  .tag { font-family:'Fredoka',sans-serif; text-align:center; color:#ffb259;
+    margin-bottom:6px; }
+  .intro { text-align:center; color:#a79fce; font-size:0.95rem; margin-bottom:22px; }
+  .sheet h2 { font-family:'Fredoka',sans-serif; font-weight:600; font-size:1.15rem;
+    color:#ffd9a6; margin:20px 0 6px; }
+  .sheet ol, .sheet ul { padding-left:22px; }
+  .sheet li { margin-bottom:4px; }
+  .sheet p { margin-bottom:6px; }
+  .sheet strong { color:#ffd9a6; }
+  .foot { text-align:center; color:#a79fce; font-size:0.85rem; margin-top:24px;
+    padding-top:16px; border-top:1px solid rgba(255,255,255,0.09); }
+
+  @media print {
+    body { background:#fff; color:#111; padding:0; font-size:10.5pt; }
+    .controls { display:none; }
+    .sheet { max-width:none; margin:0; background:#fff; border:none;
+      border-radius:0; padding:0.4in 0.5in; }
+    .sheet h1 { font-size:20pt; color:#111; }
+    .tag { color:#444; }
+    .intro { color:#444; margin-bottom:14px; }
+    .sheet h2 { color:#111; font-size:12pt; margin:12px 0 3px;
+      border-bottom:1px solid #ccc; }
+    .sheet strong { color:#111; }
+    .foot { color:#666; border-color:#ccc; }
+  }
+</style>
+</head>
+<body>
+  <div class="controls">
+    <button class="print-btn" id="print-btn">🖨️ Print this sheet</button>
+    <a class="back" href="play.html">← Back to the app</a>
+  </div>
+
+  <div class="sheet">
+    <h1>👻 Third Settler</h1>
+    <p class="tag">Two-Player House Rules</p>
+    <p class="intro">For playing a hex-and-resource board game with just two people,
+      plus the Ghost.</p>
+
+    <h2>Setup</h2>
+    <ol>
+      <li>Build the board the app deals you (Standard or Random) — tiles and number
+        tokens to match.</li>
+      <li>Place the Ghost's <strong>4 blocker settlements</strong> on the corners the app
+        marks with 👻. They never produce resources and never score.</li>
+      <li>Draft your own starting settlements and roads — take turns, snake order. Your
+        second settlement pays starting resources.</li>
+      <li>The robber starts on the desert.</li>
+    </ol>
+
+    <h2>Turn order</h2>
+    <p>You, then your opponent, then the Ghost. Repeat until someone wins.</p>
+
+    <h2>On your turn</h2>
+    <ol>
+      <li>Roll the dice. <strong>Everyone</strong> collects resources from hexes whose
+        number matches the roll.</li>
+      <li>Roll a 7: move the robber, steal a card, and anyone holding 8 or more cards
+        discards half.</li>
+      <li>Build roads, settlements, and cities, trade, or buy a development card.</li>
+      <li>Bank trades are <strong>3-for-1</strong> instead of 4-for-1. Ports work as
+        printed.</li>
+    </ol>
+
+    <h2>The Ghost's turn</h2>
+    <p>The Ghost rolls the dice (everyone collects), then builds one road — aimed at
+      whoever is ahead. Its 4 blockers just sit there hogging strong corners; they never
+      produce and never score. The Ghost is a spoiler, not a scorer.</p>
+
+    <h2>Winning</h2>
+    <p>First player to <strong>10 victory points</strong> wins. Settlement = 1, city = 2,
+      Longest Road = 2, Largest Army = 2, plus any victory-point development cards.</p>
+
+    <p class="foot">Third Settler — the player who always shows up.<br />
+      third-settler.vercel.app · free &amp; open source</p>
+  </div>
+
+  <script>
+    document.getElementById('print-btn').addEventListener('click', function () {
+      window.print();
+    });
+  </script>
+</body>
+</html>
