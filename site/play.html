@@ -100,6 +100,8 @@
   .steps { padding-left:20px; color:var(--text-dim); font-size:0.95rem; }
   .steps li { margin-bottom:6px; }
   .steps strong { color:var(--candle-soft); }
+  .gmark { animation:ghostPulse 1.4s ease-in-out infinite; }
+  @keyframes ghostPulse { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
 
   /* ---- game: top bar ---- */
   .gametop { display:flex; justify-content:space-between; align-items:center;
@@ -237,8 +239,8 @@
   <div class="wrap">
     <div class="kicker">Set up the board</div>
     <h1 class="title">Tonight's map 👻</h1>
-    <p class="sub">Pick how to set up, then lay your real tiles to match — terrain and
-      number tokens exactly as shown.</p>
+    <p class="sub">Pick a board, then copy it onto your real table — terrain, number
+      tokens, and a Ghost blocker on every pulsing 👻.</p>
 
     <div class="seg" id="board-mode">
       <button class="seg-btn" data-mode="standard" type="button">📋 Standard</button>
@@ -246,21 +248,22 @@
     </div>
 
     <div class="board-wrap">
-      <svg id="board-svg" viewBox="0 0 423 392" role="img"
-           aria-label="The board layout to copy onto your table"></svg>
+      <svg id="board-svg" viewBox="-5 -5 433 402" role="img"
+           aria-label="The board layout and the Ghost's blocker spots"></svg>
     </div>
 
     <button class="btn btn-soft" id="deal-btn">🎲 Deal a different board</button>
     <p class="board-note" id="board-note"></p>
 
     <div class="panel" style="margin-top:16px;">
-      <p class="f" style="color:var(--candle-soft);margin-bottom:8px;">Then, on the board:</p>
+      <p class="f" style="color:var(--candle-soft);margin-bottom:8px;">Set up in this order:</p>
       <ol class="steps">
-        <li>Place starting settlements &amp; roads — take turns, snake order. Your second
-          settlement pays starting resources.</li>
-        <li>Place <strong>4 Ghost blockers</strong> 👻 — 2 each, on strong open corners.
-          They never produce and never score.</li>
-        <li>The robber starts on the desert. Bank trades are <strong>3-for-1</strong>.</li>
+        <li><strong>Place the Ghost's 4 blockers</strong> 👻 — copy the four pulsing
+          spots from the board above. They never produce and never score.</li>
+        <li><strong>Draft your own pieces</strong> — take turns placing settlements &amp;
+          roads around the Ghost's blockers, snake order. Your second settlement pays
+          starting resources.</li>
+        <li>The robber starts on the desert; bank trades are <strong>3-for-1</strong>.</li>
       </ol>
     </div>
 
@@ -451,22 +454,101 @@
     return board;
   }
 
+  var HEX_R = 46, BOARD_PAD = 12;
+  var HEX_W = HEX_R * Math.sqrt(3);
+  var ROW_COUNTS = [3, 4, 5, 4, 3];
+
+  // The 19 hex centre points, in row order.
+  function hexCenters() {
+    var centers = [];
+    for (var r = 0; r < 5; r++) {
+      var off = (5 - ROW_COUNTS[r]) / 2 * HEX_W;
+      var cy = BOARD_PAD + HEX_R + r * 1.5 * HEX_R;
+      for (var j = 0; j < ROW_COUNTS[r]; j++) {
+        centers.push({ cx: BOARD_PAD + HEX_W / 2 + off + j * HEX_W, cy: cy });
+      }
+    }
+    return centers;
+  }
+
+  // Every board corner (intersection), tagged with the hexes that touch it.
+  function hexCorners(centers) {
+    var list = [];
+    for (var h = 0; h < centers.length; h++) {
+      for (var i = 0; i < 6; i++) {
+        var ang = (-90 + 60 * i) * Math.PI / 180;
+        var x = centers[h].cx + HEX_R * Math.cos(ang);
+        var y = centers[h].cy + HEX_R * Math.sin(ang);
+        var hit = null;
+        for (var k = 0; k < list.length; k++) {
+          var ex = list[k].x - x, ey = list[k].y - y;
+          if (ex * ex + ey * ey < 4) { hit = list[k]; break; }
+        }
+        if (!hit) { hit = { x: x, y: y, hexes: [] }; list.push(hit); }
+        if (hit.hexes.indexOf(h) === -1) hit.hexes.push(h);
+      }
+    }
+    return list;
+  }
+
+  function pipValue(n) { return n == null ? 0 : 6 - Math.abs(7 - n); }
+
+  // The Ghost's four blocker spots: the highest-value corners that still
+  // obey the distance rule (no two settlements one road apart).
+  function pickGhostSpots(board, corners) {
+    var scored = corners.map(function (c) {
+      var v = 0;
+      for (var i = 0; i < c.hexes.length; i++) v += pipValue(board[c.hexes[i]].number);
+      return { x: c.x, y: c.y, value: v };
+    });
+    scored.sort(function (a, b) { return b.value - a.value; });
+    var picked = [], gap = HEX_R * 1.4;
+    for (var i = 0; i < scored.length && picked.length < 4; i++) {
+      var ok = true;
+      for (var p = 0; p < picked.length; p++) {
+        var dx = scored[i].x - picked[p].x, dy = scored[i].y - picked[p].y;
+        if (Math.sqrt(dx * dx + dy * dy) < gap) { ok = false; break; }
+      }
+      if (ok) picked.push(scored[i]);
+    }
+    return picked;
+  }
+
   function renderBoard(board) {
     var svg = $('board-svg');
     if (!svg) return;
-    var R = 46, P = 12, hexW = R * Math.sqrt(3);
-    var counts = [3, 4, 5, 4, 3];
-    var x0 = P + hexW / 2, y0 = P + R;
     svg.innerHTML = '';
-    var h = 0;
-    for (var r = 0; r < 5; r++) {
-      var off = (5 - counts[r]) / 2 * hexW;
-      var cy = y0 + r * 1.5 * R;
-      for (var j = 0; j < counts[r]; j++) {
-        drawHex(svg, x0 + off + j * hexW, cy, R, board[h]);
-        h++;
-      }
+    var centers = hexCenters();
+    for (var h = 0; h < centers.length; h++) {
+      drawHex(svg, centers[h].cx, centers[h].cy, HEX_R, board[h]);
     }
+    var spots = pickGhostSpots(board, hexCorners(centers));
+    for (var s = 0; s < spots.length; s++) {
+      drawGhostMarker(svg, spots[s].x, spots[s].y);
+    }
+  }
+
+  function drawGhostMarker(svg, x, y) {
+    var ns = 'http://www.w3.org/2000/svg';
+    var g = document.createElementNS(ns, 'g');
+    g.setAttribute('class', 'gmark');
+    var c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', x);
+    c.setAttribute('cy', y);
+    c.setAttribute('r', '15');
+    c.setAttribute('fill', '#7c63ff');
+    c.setAttribute('stroke', '#f5f2ff');
+    c.setAttribute('stroke-width', '2.5');
+    g.appendChild(c);
+    var t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', x);
+    t.setAttribute('y', y);
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('dominant-baseline', 'central');
+    t.setAttribute('font-size', '16');
+    t.textContent = '👻';
+    g.appendChild(t);
+    svg.appendChild(g);
   }
 
   function drawHex(svg, cx, cy, R, hex) {

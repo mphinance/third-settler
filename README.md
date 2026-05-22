@@ -85,6 +85,12 @@ neck who always shows up**: a third player that blocks the good spots, takes its
 never argues about whose go it is. Predictable, fair, and *just* annoying enough to make the
 game a real game again.
 
+**How does it know where to go?** It doesn't watch your table — it *deals* it. At setup the
+app generates the board, scores every corner by production value, and marks the four
+strongest with a pulsing 👻 for the Ghost's blockers. You copy those spots onto your real
+board. Your own pieces are yours to place however you like — the Ghost is a blocker and
+never needs to know where you built.
+
 ## 📲 Use it on your phone
 
 No install, no app store, no account — Third Settler runs in any phone browser. On iOS you
