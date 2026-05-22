@@ -5,6 +5,7 @@
 ### *The player who always shows up.*
 
 [![Live](https://img.shields.io/badge/▲_live-third--settler.vercel.app-000000)](https://third-settler.vercel.app/)
+[![Screenshots](https://github.com/mphinance/third-settler/actions/workflows/screenshots.yml/badge.svg)](https://github.com/mphinance/third-settler/actions/workflows/screenshots.yml)
 [![PWA](https://img.shields.io/badge/PWA-installable-7c63ff)](https://third-settler.vercel.app/)
 ![Price](https://img.shields.io/badge/price-free_forever-46c98b)
 ![License](https://img.shields.io/badge/license-MIT-9f8aff)
@@ -26,6 +27,8 @@
 <img src="screenshots/win.png" width="200" alt="The win screen" />
 
 <sub>The landing page · tonight's board with the Ghost's blockers · game night · a winner 🎉</sub>
+
+<sub>↻ These refresh themselves whenever the UI changes — see [`.github/workflows/screenshots.yml`](.github/workflows/screenshots.yml)</sub>
 
 </div>
 

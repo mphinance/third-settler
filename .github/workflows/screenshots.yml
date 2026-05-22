@@ -1,0 +1,50 @@
+name: Screenshots
+
+# Regenerate the README screenshots whenever the UI changes, and commit
+# them back. The capture is deterministic (seeded RNG + frozen animations),
+# so this only produces a commit when the UI has actually moved.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'scripts/screenshot.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture screenshots
+        run: npm run screenshots
+
+      - name: Commit any changes
+        run: |
+          git add screenshots
+          if git diff --cached --quiet; then
+            echo "Screenshots are already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh README screenshots [skip ci]"
+          git push
