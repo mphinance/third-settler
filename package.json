@@ -1,0 +1,13 @@
+{
+  "name": "third-settler",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The player who always shows up - a two-player board game companion.",
+  "license": "MIT",
+  "scripts": {
+    "screenshots": "node scripts/screenshot.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

@@ -18,6 +18,19 @@
 
 ---
 
+<div align="center">
+
+<img src="screenshots/landing.png" width="200" alt="Landing page" />
+<img src="screenshots/board.png" width="200" alt="Tonight's board, dealt with the Ghost's blocker spots marked" />
+<img src="screenshots/game.png" width="200" alt="A game in progress" />
+<img src="screenshots/win.png" width="200" alt="The win screen" />
+
+<sub>The landing page · tonight's board with the Ghost's blockers · game night · a winner 🎉</sub>
+
+</div>
+
+---
+
 ## 🎲 The problem
 
 Some of the best board games quietly demand three or four players. If it's just you and
