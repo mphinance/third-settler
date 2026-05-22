@@ -47,4 +47,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Refresh README screenshots [skip ci]"
+          # Rebase onto any commits that landed while the job was running,
+          # so the push always fast-forwards.
+          git pull --rebase origin main
           git push
