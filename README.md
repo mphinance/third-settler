@@ -107,7 +107,7 @@ network-first, so you always get the latest version while online.
 - [x] Landing page built as an installable PWA
 - [x] Deployed live on Vercel
 - [x] Playable game companion — setup, dice, the Ghost's turns, scores, win detection
-- [x] Ghost turn engine (v1 — narrated road-building)
+- [x] Ghost turn engine — narrated road-building that targets the leader
 - [x] In-app rules reference
 - [x] Balanced board generator — deals a fresh map, no two red numbers adjacent
 - [x] Printable one-page rules sheet

@@ -342,8 +342,8 @@
     <h3>The Ghost 👻</h3>
     <ul>
       <li>4 blocker settlements were placed at setup. They never produce and never score.</li>
-      <li>On the Ghost's turn it rolls (everyone collects), then builds one road — the app
-        tells you roughly where.</li>
+      <li>On the Ghost's turn it rolls (everyone collects), then builds one road — aimed at
+        whoever's ahead. Tap who's leading and the app says where.</li>
     </ul>
 
     <h3>Dice & the robber</h3>
@@ -379,11 +379,18 @@
 
   var GHOST_BUILDS = [
     "The Ghost extends its longest road toward the most open, unclaimed corner.",
-    "The Ghost builds a road that crowds whoever's ahead — block their next settlement.",
+    "The Ghost drops a road in an awkward spot, purely to be in the way.",
     "The Ghost builds toward the nearest empty harbor, purely to be annoying.",
     "The Ghost pushes a road into the most contested stretch of the board.",
     "The Ghost seals off an open corner with a new road. Nobody settles there now.",
     "The Ghost stretches a road along the longest open edge it can reach."
+  ];
+
+  var GHOST_BUILDS_TARGETED = [
+    "The Ghost builds a road to crowd {name}'s side of the board.",
+    "The Ghost cuts a road straight into {name}'s open expansion lane.",
+    "The Ghost drops a road right where {name} wanted to grow next.",
+    "The Ghost walls off {name}'s easiest path to a new settlement."
   ];
 
   var PIPS = {1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
@@ -755,16 +762,18 @@
     } else if (game.step === 'roll') {
       html = mkBtn('ghost-roll', '🎲 Roll for the Ghost');
     } else if (game.step === 'build') {
-      html = mkBtn('ghost-build', '👻 See what the Ghost builds');
+      html = mkBtn('aim-0', '👻 ' + game.players[0].name + ' is ahead', 'soft') +
+             mkBtn('aim-1', '👻 ' + game.players[1].name + ' is ahead', 'soft') +
+             mkBtn('aim-x', "👻 It's a tie", 'soft');
     } else {
       html = mkBtn('end-turn', "End the Ghost's turn →");
     }
     $('g-action-btns').innerHTML = html;
   }
 
-  function mkBtn(action, label) {
-    return '<button class="btn btn-primary" data-action="' + action + '">' +
-           label + '</button>';
+  function mkBtn(action, label, kind) {
+    return '<button class="btn btn-' + (kind || 'primary') + '" data-action="' +
+           action + '">' + label + '</button>';
   }
 
   /* ---------- actions ---------- */
@@ -799,8 +808,15 @@
       persist(); renderGame();
     });
   }
-  function ghostBuild() {
-    game.ghostAction = '👻 ' + GHOST_BUILDS[Math.floor(Math.random() * GHOST_BUILDS.length)];
+  function ghostBuild(target) {
+    var line;
+    if (target == null) {
+      line = GHOST_BUILDS[Math.floor(Math.random() * GHOST_BUILDS.length)];
+    } else {
+      line = GHOST_BUILDS_TARGETED[Math.floor(Math.random() * GHOST_BUILDS_TARGETED.length)]
+        .replace('{name}', game.players[target].name);
+    }
+    game.ghostAction = '👻 ' + line;
     game.step = 'built';
     persist(); renderGame();
   }
@@ -913,7 +929,9 @@
       var a = b.getAttribute('data-action');
       if (a === 'human-roll') humanRoll();
       else if (a === 'ghost-roll') ghostRoll();
-      else if (a === 'ghost-build') ghostBuild();
+      else if (a === 'aim-0') ghostBuild(0);
+      else if (a === 'aim-1') ghostBuild(1);
+      else if (a === 'aim-x') ghostBuild(null);
       else if (a === 'end-turn') advanceTurn();
     });
 

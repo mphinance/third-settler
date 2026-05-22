@@ -177,7 +177,7 @@ Non-negotiable rules baked into the project:
 ### Phase 1 — The Game Master engine
 - [x] Board generator — balanced, enforces the 6/8 adjacency rule
 - [x] Dice roller + production narration
-- [x] Ghost turn engine + policies (v1 — narrated road-building)
+- [x] Ghost turn engine + policies — narrated road-building, targets the leader
 - [x] Score tracker + win detection
 
 ### Phase 2 — Polish & feel
